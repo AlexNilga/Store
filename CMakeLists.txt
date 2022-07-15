@@ -3,4 +3,4 @@ project(Store)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Store main.cpp Store/Menu.cpp Store/Menu.h Store/MenuItem.cpp Store/MenuItem.h)
+add_executable(Store main.cpp Store/Menu.cpp Store/Menu.h Store/MenuItem.cpp Store/MenuItem.h Store/Store.cpp Store/Store.h)

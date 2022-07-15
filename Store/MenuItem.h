@@ -15,7 +15,7 @@ public:
 
     string getTitle() { return this->title; }
 
-    int getCommand() { return this->command; }
+    int getCommand() const { return this->command; }
 
 };
 

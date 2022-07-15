@@ -2,7 +2,7 @@
 
 #include "Menu.h"
 
-Menu::Menu() {
+Menu::Menu() : m_items() {
 
 }
 
@@ -15,8 +15,8 @@ int Menu::Execute() {
     while (true) {
         cout << endl << "Select action: " << endl;
 
-        for (int i = 0; i < m_items.size(); ++i) {
-            cout << "  " << m_items[i].getTitle() << endl;
+        for (auto & m_item : m_items) {
+            cout << "  " << m_item.getTitle() << endl;
         }
 
         cout << endl << "You choice:> ";
@@ -24,8 +24,8 @@ int Menu::Execute() {
 
         std::cin >> command;
 
-        for (std::vector<MenuItem>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
-            if (command == it->getCommand()) {
+        for (auto & m_item : m_items) {
+            if (command == m_item.getCommand()) {
                 return command;
             }
         }
