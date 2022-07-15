@@ -19,7 +19,7 @@ int Menu::Execute() {
     cout << endl << "Select action: " << endl;
 
     for (int i = 0; i < this->items.size(); ++i) {
-        cout << '\t' << items[i].getTitle() << endl;
+        cout << "  " << items[i].getTitle() << endl;
     }
 
     cout << endl << "You choice:> ";
