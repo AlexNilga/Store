@@ -1,32 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@NickNilga 
-github
-/
-gitignore
-Public
-Code
-Pull requests
-286
-Actions
-Security
-Insights
-gitignore/Global/JetBrains.gitignore
-@bdougie
-bdougie Merge pull request #3607 from TigerC10/updating-jetbrains-sonarlint-p…
-…
-Latest commit cdde85a on Dec 11, 2021
- History
- 46 contributors
-@bamapookie@thunsaker@samskiter@LazarusX@arcresu@akelsch@victorhaggqvist@davidkron@shiftkey@quadroid@twhitbeck@tsteinholz
-77 lines (60 sloc)  1.55 KB
-IntelliJ IDEA
-
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
@@ -104,18 +75,3 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-You have unread notifications
