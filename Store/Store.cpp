@@ -8,6 +8,7 @@ Store::Store() : mMenu() {
 }
 
 void Store::Run() {
+
     int command;
 
     do {
