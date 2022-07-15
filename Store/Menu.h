@@ -1,7 +1,3 @@
-//
-// Created by MykolaN on 7/15/2022.
-//
-
 #ifndef FINAL_MENU_H
 #define FINAL_MENU_H
 
@@ -12,7 +8,7 @@
 class Menu {
 
 private:
-    std::vector<MenuItem> items;
+    std::vector<MenuItem> m_items;
 
 public:
     Menu();

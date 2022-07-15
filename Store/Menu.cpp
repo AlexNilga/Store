@@ -1,7 +1,3 @@
-//
-// Created by MykolaN on 7/15/2022.
-//
-
 #include <iostream>
 
 #include "Menu.h"
@@ -11,21 +7,27 @@ Menu::Menu() {
 }
 
 void Menu::AddItem(const MenuItem &item) {
-    this->items.push_back(item);
+    this->m_items.push_back(item);
 }
 
 int Menu::Execute() {
 
-    cout << endl << "Select action: " << endl;
+    while (true) {
+        cout << endl << "Select action: " << endl;
 
-    for (int i = 0; i < this->items.size(); ++i) {
-        cout << "  " << items[i].getTitle() << endl;
+        for (int i = 0; i < m_items.size(); ++i) {
+            cout << "  " << m_items[i].getTitle() << endl;
+        }
+
+        cout << endl << "You choice:> ";
+        int command;
+
+        std::cin >> command;
+
+        for (std::vector<MenuItem>::iterator it = m_items.begin(); it != m_items.end(); ++it) {
+            if (command == it->getCommand()) {
+                return command;
+            }
+        }
     }
-
-    cout << endl << "You choice:> ";
-    int command;
-
-    std::cin >> command;
-
-    return command;
 }
