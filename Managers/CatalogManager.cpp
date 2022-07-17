@@ -1,0 +1,2 @@
+#include "CatalogManager.h"
+

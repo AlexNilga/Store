@@ -1,5 +1,5 @@
-#ifndef Store_ProductOffer_H
-#define Store_ProductOffer_H
+#ifndef STORE_PRODUCTOFFER_H
+#define STORE_PRODUCTOFFER_H
 
 #include <string>
 

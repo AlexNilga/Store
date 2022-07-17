@@ -1,5 +1,5 @@
-#ifndef Store_ProductCatalog_H
-#define Store_ProductCatalog_H
+#ifndef STORE_PRODUCTCATALOG_H
+#define STORE_PRODUCTCATALOG_H
 
 #include <string>
 
