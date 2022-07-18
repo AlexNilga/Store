@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "Store/Store.h"
+#include "Managers/StoreManager.h"
 
 int main() {
-
-    Store store = Store();
+    Repository repository = Repository();
+    StoreManager store = StoreManager(repository);
 
     store.Run();
 
