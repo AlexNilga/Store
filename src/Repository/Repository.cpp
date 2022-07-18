@@ -7,7 +7,7 @@ const char *DATABASE_NAME = "../Database/store.db";
 Repository::Repository() {
 
     int rc = sqlite3_open(DATABASE_NAME, &m_database);
-    if (rc) {
+    if (rc != SQLITE_OK) {
         throw new StoreException(
                 string("Can't open database: ") + sqlite3_errmsg(m_database));
     }
@@ -29,7 +29,7 @@ void Repository::InitDatabase() {
          "DESCRIPTION TEXT NOT NULL);";
 
     int rc = sqlite3_exec(m_database, sql.c_str(), NULL, NULL, NULL);
-    if (rc) {
+    if (rc != SQLITE_OK) {
         throw new StoreException(
                 string("Can't create table [Catalog]: ") + sqlite3_errmsg(m_database));
     }
@@ -64,6 +64,11 @@ vector<ProductCatalog> Repository::ListCatalogs() {
             ReadCatalogsCallback,
             &catalogs,
             &zErrMsg);
+
+    if (rc != SQLITE_OK) {
+        throw new StoreException(
+                string("Can't create table [Catalog]: ") + zErrMsg);
+    }
 
     return catalogs;
 }
