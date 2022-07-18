@@ -2,7 +2,6 @@
 #include <iomanip>
 #include "CatalogManager.h"
 #include "../Menu/Menu.h"
-#include "../Store/ProductOffer.h"
 
 using namespace std;
 
@@ -28,29 +27,23 @@ void CatalogManager::Run() {
 
         switch (catalogCommand) { // NOLINT(hicpp-multiway-paths-covered)
             case 1:
-                PrintCatalogs();
+                ListCatalogs();
                 break;
             case 2:
-                PrintOffers();
+                ListOffers();
                 break;
         }
 
     } while (catalogCommand != cExitCommand);
 }
 
-void CatalogManager::PrintCatalogs() {
+void CatalogManager::ListCatalogs() {
+
     vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
-
-    cout << "Select catalog: " << '\n' << left;
-
-    for (auto &catalog: catalogs) {
-        cout << setw(3) << catalog.getId()
-             << setw(20) << catalog.getName()
-             << catalog.getDescription() << '\n';
-    }
+    PrintCatalogs(catalogs);
 }
 
-void CatalogManager::PrintOffers() {
+void CatalogManager::ListOffers() {
     vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
 
     int chooseCommand;
@@ -59,7 +52,10 @@ void CatalogManager::PrintOffers() {
     Menu chooseMenu = Menu("Catalogs");
 
     for (auto &catalog: catalogs) {
-        chooseMenu.AddItem(MenuItem(to_string(catalog.getId()) + ". " + catalog.getName(), catalog.getId()));
+        chooseMenu.AddItem(MenuItem(
+                to_string(catalog.getId())
+                + ". " + catalog.getName(),
+                catalog.getId()));
     }
 
     chooseMenu.AddItem(MenuItem("0. Exit", cExitCommand));
@@ -73,13 +69,54 @@ void CatalogManager::PrintOffers() {
 
         for (auto &catalog: catalogs) {
             if (chooseCommand == catalog.getId()) {
+
                 vector<ProductOffer> offers = m_repository.ListOffers(chooseCommand);
-                //Print offers
+                PrintOffers(offers);
+
                 return;
             }
         }
 
     } while (true);
+}
+
+
+void CatalogManager::PrintCatalogs(vector<ProductCatalog> catalogs) {
+
+    cout << endl << left
+         << setw(5) << "ID"
+         << setw(20) << "NAME"
+         << setw(50) << "DESCRIPTION"
+         << endl;
+
+    for (auto &catalog: catalogs) {
+        cout << left
+             << setw(5) << catalog.getId()
+             << setw(20) << catalog.getName()
+             << setw(50) << catalog.getDescription()
+             << endl;
+    }
+}
+
+void CatalogManager::PrintOffers(vector<ProductOffer> offers) {
+    cout << endl << left;
+    cout << left
+         << setw(5) << "ID"
+         << setw(20) << "NAME"
+         << setw(50) << "DESCRIPTION"
+         << setw(8) << "PRICE"
+         << setw(5) << " QTY"
+         << endl;
+
+    for (auto &offer: offers) {
+        cout << left
+             << setw(5) << offer.getId()
+             << setw(20) << offer.getName()
+             << setw(50) << offer.getDescription()
+             << "$" << setw(8) << offer.getPrice()
+             << setw(5) << offer.getQuantity()
+             << endl;
+    }
 }
 
 
