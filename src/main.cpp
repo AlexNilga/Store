@@ -8,13 +8,11 @@ int main() {
 
     try {
 
+        // Create repository and init database.
         Repository repository = Repository();
-
-        // Initialize database.
         repository.Init();
 
         StoreManager store = StoreManager(repository);
-
         store.Run();
 
         std::cout << "Bye!";
