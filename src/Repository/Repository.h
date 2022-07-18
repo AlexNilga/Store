@@ -24,6 +24,12 @@ public:
     vector<ProductCatalog> ListCatalogs();
 
     vector<ProductOffer> ListOffers(int catalogId);
+
+    void AddOffer(ProductOffer &offer);
+
+    void DeleteOffer(int offerId);
+
+    void UpdateOffer(ProductOffer &offer);
 };
 
 

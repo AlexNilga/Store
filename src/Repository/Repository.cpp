@@ -22,7 +22,7 @@ Repository::~Repository() {
 void Repository::Init() {
 
     string sql = "CREATE TABLE IF NOT EXISTS Catalog("  \
-         "ID INT PRIMARY KEY NOT NULL," \
+         "ID INTEGER PRIMARY KEY," \
          "NAME TEXT NOT NULL," \
          "DESCRIPTION TEXT NOT NULL);";
 
@@ -32,7 +32,7 @@ void Repository::Init() {
     }
 
     sql = "CREATE TABLE IF NOT EXISTS Offer("  \
-         "ID INT PRIMARY KEY NOT NULL," \
+         "ID INTEGER PRIMARY KEY," \
          "NAME TEXT NOT NULL," \
          "DESCRIPTION TEXT NOT NULL," \
          "CATALOG_ID INT NOT NULL," \
@@ -113,9 +113,9 @@ vector<ProductOffer> Repository::ListOffers(int catalogId) {
 
     vector<ProductOffer> offers;
 
-    string sql ="SELECT ID, NAME, DESCRIPTION, CATALOG_ID, PRICE, QUANTITY FROM Offer WHERE CATALOG_ID="
-            + to_string(catalogId)
-            + ";";
+    string sql = "SELECT ID, NAME, DESCRIPTION, CATALOG_ID, PRICE, QUANTITY FROM Offer WHERE CATALOG_ID="
+                 + to_string(catalogId)
+                 + ";";
 
     int rc = sqlite3_exec(
             m_database,
@@ -129,4 +129,53 @@ vector<ProductOffer> Repository::ListOffers(int catalogId) {
     }
 
     return offers;
+}
+
+/// Adds product offer to the database
+/// \param offer
+void Repository::AddOffer(ProductOffer &offer) {
+
+    string sql = "INSERT INTO Offer(NAME,DESCRIPTION,CATALOG_ID,PRICE,QUANTITY) VALUES("
+                 + offer.getName() + ","
+                 + offer.getDescription() + ","
+                 + to_string(offer.getCatalogId()) + ","
+                 + to_string(offer.getPrice()) + ","
+                 + to_string(offer.getQuantity())
+                 + ");";
+
+    int rc = sqlite3_exec(
+            m_database,
+            sql.c_str(),
+            nullptr,
+            nullptr,
+            nullptr);
+
+    if (rc != SQLITE_OK) {
+        throw StoreException(string("Cannot insert offer into the database: ") + sqlite3_errmsg(m_database));
+    }
+}
+
+/// Deletes offer from the database.
+/// \param offerId
+void Repository::DeleteOffer(int offerId) {
+
+    string sql = "DELETE FROM Offer WHERE ID = " + to_string(offerId) + ";";
+    int rc = sqlite3_exec(
+            m_database,
+            sql.c_str(),
+            nullptr,
+            nullptr,
+            nullptr);
+
+    if (rc != SQLITE_OK) {
+        throw StoreException(
+                string("Cannot delete offer [") + to_string(offerId) + "] from the database: "
+                + sqlite3_errmsg(m_database));
+    }
+}
+
+/// Update offer in the database.
+/// \param offer
+void Repository::UpdateOffer(ProductOffer &offer) {
+
 }

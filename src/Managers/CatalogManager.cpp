@@ -18,7 +18,7 @@ void CatalogManager::Run() {
 
     catalogMenu.AddItem(MenuItem("1. List Catalogs", cListCatalogsCommand));
     catalogMenu.AddItem(MenuItem("2. List Offers", cListOffersCommand));
-    catalogMenu.AddItem(MenuItem("0. Exit", cExitCommand));
+    catalogMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     int catalogCommand;
 
@@ -58,7 +58,7 @@ void CatalogManager::ListOffers() {
                 catalog.getId()));
     }
 
-    chooseMenu.AddItem(MenuItem("0. Exit", cExitCommand));
+    chooseMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     do {
         chooseCommand = chooseMenu.Execute();
@@ -80,7 +80,8 @@ void CatalogManager::ListOffers() {
     } while (true);
 }
 
-
+/// Prints catalogs to the console.
+/// \param catalogs
 void CatalogManager::PrintCatalogs(vector<ProductCatalog> catalogs) {
 
     cout << endl << left
@@ -98,6 +99,8 @@ void CatalogManager::PrintCatalogs(vector<ProductCatalog> catalogs) {
     }
 }
 
+/// Prints product offers to the console.
+/// \param offers
 void CatalogManager::PrintOffers(vector<ProductOffer> offers) {
     cout << endl << left;
     cout << left
