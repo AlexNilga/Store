@@ -10,13 +10,15 @@ using namespace std;
 class Repository {
 private:
     sqlite3 *m_database;
-
+    void InitDatabase();
 public:
     Repository();
 
     ~Repository();
 
-    vector<ProductCatalog *> ListCatalogs();
+    static void Init();
+
+    vector<ProductCatalog> ListCatalogs();
 };
 
 

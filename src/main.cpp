@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include "Managers/StoreManager.h"
+#include "Repository/Repository.h"
+#include "StoreException.h"
 
 int main() {
     Repository repository = Repository();
@@ -8,7 +10,20 @@ int main() {
 
     store.Run();
 
-    std::cout << "Bye!";
+    try {
+        // Initialize database.
+        Repository::Init();
+
+        Store store = Store();
+        store.Run();
+
+        std::cout << "Bye!";
+
+    }
+    catch (StoreException exception) {
+        cerr << exception.GetMessage();
+        return -1;
+    }
 
     return 0;
 }
