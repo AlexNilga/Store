@@ -19,6 +19,8 @@ public:
     explicit CatalogManager(Repository &repository);
 
     void Run();
+
+    void PrintOffers();
 };
 
 #endif

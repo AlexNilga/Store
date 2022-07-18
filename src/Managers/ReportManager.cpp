@@ -1,16 +1,17 @@
 #include "ReportManager.h"
 #include "../Menu/Menu.h"
 
-const int cListCatalogsCommand = 1;
-const int cListOffersCommand = 2;
-const int cExitCommand = 3;
-
 void ReportManager::Run() {
-    Menu reportsMenu = Menu();
+    const int option1 = 1;
+    const int option2 = 2;
+    const int cExitCommand = 0;
 
-    reportsMenu.AddItem(MenuItem("1.", cListCatalogsCommand));
-    reportsMenu.AddItem(MenuItem("2.", cListOffersCommand));
-    reportsMenu.AddItem(MenuItem("3. Exit", cExitCommand));
+
+    Menu reportsMenu = Menu("Reports");
+
+    reportsMenu.AddItem(MenuItem("1.", option1));
+    reportsMenu.AddItem(MenuItem("2.", option2));
+    reportsMenu.AddItem(MenuItem("0. Exit", cExitCommand));
 
     int reportCommand;
 

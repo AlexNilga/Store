@@ -1,20 +1,20 @@
 #include "StoreManager.h"
 
-const int cListCatalogsCommand = 1;
-const int cListOffersCommand = 2;
-const int cExitCommand = 3;
-
 StoreManager::StoreManager(Repository &repository)
         : m_catalogManager(repository) {
 
 }
 
 void StoreManager::Run() {
-    Menu menu = Menu();
+    const int cListCatalogsCommand = 1;
+    const int cListOffersCommand = 2;
+    const int cExitCommand = 0;
+
+    Menu menu = Menu("Operations");
 
     menu.AddItem(MenuItem("1. Stock operations", cListCatalogsCommand));
     menu.AddItem(MenuItem("2. Reports", cListOffersCommand));
-    menu.AddItem(MenuItem("3. Exit", cExitCommand));
+    menu.AddItem(MenuItem("0. Exit", cExitCommand));
 
     int command;
 

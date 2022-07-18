@@ -10,9 +10,10 @@ class Menu {
 
 private:
     vector<MenuItem> m_items;
+    string m_title;
 
 public:
-    Menu();
+    Menu(string title);
 
     void AddItem(const MenuItem &item);
 
