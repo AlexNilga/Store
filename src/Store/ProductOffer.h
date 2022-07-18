@@ -12,16 +12,22 @@ private:
     string m_name;
     string m_description;
     int m_catalogId;
+    float m_price;
+    int m_quantity;
 
 public:
     ProductOffer(int id,
                  const string &name,
                  const string &description,
-                 int catalogId)
+                 int catalogId,
+                 float price,
+                 int quantity)
             : m_Id(id),
               m_name(name),
               m_description(description),
-              m_catalogId(catalogId) {};
+              m_catalogId(catalogId),
+              m_price(price),
+              m_quantity(quantity){};
 
     int getCatalogId() const { return m_catalogId; }
 

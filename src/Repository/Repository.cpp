@@ -28,28 +28,38 @@ void Repository::InitDatabase() {
          "NAME TEXT NOT NULL," \
          "DESCRIPTION TEXT NOT NULL);";
 
-    int rc = sqlite3_exec(m_database, sql.c_str(), NULL, NULL, NULL);
-    if (rc != SQLITE_OK) {
+    if (sqlite3_exec(m_database, sql.c_str(), NULL, NULL, NULL) != SQLITE_OK) {
         throw new StoreException(
                 string("Can't create table [Catalog]: ") + sqlite3_errmsg(m_database));
     }
+
+    sql = "CREATE TABLE IF NOT EXISTS Offer("  \
+         "ID INT PRIMARY KEY NOT NULL," \
+         "NAME TEXT NOT NULL," \
+         "DESCRIPTION TEXT NOT NULL," \
+         "CATALOG_ID INT NOT NULL," \
+         "PRICE REAL NOT NULL,"\
+         "QUANTITY INT NOT NULL);";
+
+    if (sqlite3_exec(m_database, sql.c_str(), NULL, NULL, NULL) != SQLITE_OK) {
+        throw new StoreException(
+                string("Can't create table [Offer]: ") + sqlite3_errmsg(m_database));
+    }
+
 }
 
-///
-/// \param data
-/// \param argc
-/// \param argv
-/// \param azColName
-/// \return
+/// Called by SQLite for each row in the catalogs dataset.
+/// \param data Pointer to a vector of catalogs.
+/// \param argc Holds the number of results.
+/// \param argv Single row values.
+/// \param azColName Column names.
+/// \return Zero if case of success.
 static int ReadCatalogsCallback(void *data, int argc, char **argv, char **azColName) {
-    // int argc: holds the number of results
-    // (array) azColName: holds each column returned
-    // (array) argv: holds each value
+
     ((vector<ProductCatalog> *) data)->push_back(
             ProductCatalog(stoi(argv[0]), argv[1], argv[2]));
 
-    // Return successful
-    return 0;
+    return SQLITE_OK;
 }
 
 
