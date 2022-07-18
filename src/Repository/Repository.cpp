@@ -62,6 +62,30 @@ static int ReadCatalogsCallback(
     return SQLITE_OK;
 }
 
+/// Called by SQLite for each row in the product offers dataset.
+/// \param data Pointer to a vector of product offers.
+/// \param argc Holds the number of results.
+/// \param argv Single row values.
+/// \param azColName Column names.
+/// \return Zero if case of success.
+static int ReadOffersCallback(
+        void *data,
+        __attribute__((unused)) int argc,
+        char **argv,
+        __attribute__((unused)) char **azColName) {
+
+    ((vector<ProductOffer> *) data)->push_back(
+            ProductOffer(
+                    stoi(argv[0]),
+                    argv[1],
+                    argv[2],
+                    stoi(argv[3]),
+                    stof(argv[4]),
+                    stoi(argv[5])));
+
+    return SQLITE_OK;
+}
+
 /// Lists available product catalogs.
 /// \return collection of catalogs.
 vector<ProductCatalog> Repository::ListCatalogs() {
@@ -76,7 +100,7 @@ vector<ProductCatalog> Repository::ListCatalogs() {
             nullptr);
 
     if (rc != SQLITE_OK) {
-        throw StoreException(string("Can't create table [Catalog]: ") + sqlite3_errmsg(m_database));
+        throw StoreException(string("Cannot retrieve catalogs: ") + sqlite3_errmsg(m_database));
     }
 
     return catalogs;
@@ -86,5 +110,23 @@ vector<ProductCatalog> Repository::ListCatalogs() {
 /// \param catalogId Catalog ID.
 /// \return Collection of product offers.
 vector<ProductOffer> Repository::ListOffers(int catalogId) {
-    return vector<ProductOffer>();
+
+    vector<ProductOffer> offers;
+
+    string sql ="SELECT ID, NAME, DESCRIPTION, CATALOG_ID, PRICE, QUANTITY FROM Offer WHERE CATALOG_ID="
+            + to_string(catalogId)
+            + ";";
+
+    int rc = sqlite3_exec(
+            m_database,
+            sql.c_str(),
+            ReadOffersCallback,
+            &offers,
+            nullptr);
+
+    if (rc != SQLITE_OK) {
+        throw StoreException(string("Cannot retrieve product offers: ") + sqlite3_errmsg(m_database));
+    }
+
+    return offers;
 }
