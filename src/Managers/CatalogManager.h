@@ -16,8 +16,8 @@ private:
     void ListCatalogs();
     void ListOffers();
 
-    static void PrintCatalogs(vector<ProductCatalog> catalogs);
-    static void PrintOffers(vector<ProductOffer> offers);
+    static void PrintCatalogs(const vector<ProductCatalog> &catalogs);
+    static void PrintOffers(const vector<ProductOffer> &offers);
 
 public:
     explicit CatalogManager(Repository &repository);

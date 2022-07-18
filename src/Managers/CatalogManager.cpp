@@ -26,10 +26,10 @@ void CatalogManager::Run() {
         catalogCommand = catalogMenu.Execute();
 
         switch (catalogCommand) { // NOLINT(hicpp-multiway-paths-covered)
-            case 1:
+            case cListCatalogsCommand:
                 ListCatalogs();
                 break;
-            case 2:
+            case cListOffersCommand:
                 ListOffers();
                 break;
         }
@@ -82,7 +82,7 @@ void CatalogManager::ListOffers() {
 
 /// Prints catalogs to the console.
 /// \param catalogs
-void CatalogManager::PrintCatalogs(vector<ProductCatalog> catalogs) {
+void CatalogManager::PrintCatalogs(const vector<ProductCatalog> &catalogs) {
 
     cout << endl << left
          << setw(5) << "ID"
@@ -101,7 +101,7 @@ void CatalogManager::PrintCatalogs(vector<ProductCatalog> catalogs) {
 
 /// Prints product offers to the console.
 /// \param offers
-void CatalogManager::PrintOffers(vector<ProductOffer> offers) {
+void CatalogManager::PrintOffers(const vector<ProductOffer> &offers) {
     cout << endl << left;
     cout << left
          << setw(5) << "ID"

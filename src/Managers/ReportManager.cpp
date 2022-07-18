@@ -27,9 +27,10 @@ void ReportManager::Run() {
         reportCommand = reportsMenu.Execute();
 
         switch (reportCommand) { // NOLINT(hicpp-multiway-paths-covered)
-            case 1:
+            case option1:
                 break;
-            case 2:
+
+            case option2:
                 break;
 
         }

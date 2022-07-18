@@ -7,14 +7,14 @@ StoreManager::StoreManager(Repository &repository)
 }
 
 void StoreManager::Run() {
-    const int cListCatalogsCommand = 1;
-    const int cListOffersCommand = 2;
+    const int cCatalogCommands = 1;
+    const int cReportCommands = 2;
     const int cExitCommand = 0;
 
     Menu menu = Menu("Operations");
 
-    menu.AddItem(MenuItem("1. Stock operations", cListCatalogsCommand));
-    menu.AddItem(MenuItem("2. Reports", cListOffersCommand));
+    menu.AddItem(MenuItem("1. Product Catalog", cCatalogCommands));
+    menu.AddItem(MenuItem("2. Reports", cReportCommands));
     menu.AddItem(MenuItem("0. Exit Application", cExitCommand));
 
     int command;
@@ -23,11 +23,11 @@ void StoreManager::Run() {
         command = menu.Execute();
 
         switch (command) { // NOLINT(hicpp-multiway-paths-covered)
-            case 1:
+            case cCatalogCommands:
                 m_catalogManager.Run();
                 break;
 
-            case 2:
+            case cReportCommands:
                 m_reportManager.Run();
                 break;
         }
