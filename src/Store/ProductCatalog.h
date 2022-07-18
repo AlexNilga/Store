@@ -12,12 +12,10 @@ private:
     string m_description;
 
 public:
-    ProductCatalog(int id,
-                   const string &name,
-                   const string &description)
+    ProductCatalog(int id, string name, string description)
             : m_id(id),
-              m_name(name),
-              m_description(description) {};
+              m_name(std::move(name)),
+              m_description(std::move(description)) {};
 
     int getId() const { return m_id; }
 

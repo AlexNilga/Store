@@ -4,11 +4,11 @@
 
 const char *DATABASE_NAME = "../Database/store.db";
 
-Repository::Repository() {
+Repository::Repository() : m_database(nullptr) {
 
     int rc = sqlite3_open(DATABASE_NAME, &m_database);
     if (rc != SQLITE_OK) {
-        throw new StoreException(
+        throw StoreException(
                 string("Can't open database: ") + sqlite3_errmsg(m_database));
     }
 }

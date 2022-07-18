@@ -1,11 +1,12 @@
 #include <iostream>
+#include <iomanip>
 #include "CatalogManager.h"
 #include "../Menu/Menu.h"
 
 using namespace std;
 
-CatalogManager::CatalogManager(Repository repository) {
-    m_repository = repository;
+CatalogManager::CatalogManager(Repository &repository)
+        : m_repository(repository) {
 }
 
 void CatalogManager::Run() {
@@ -21,11 +22,12 @@ void CatalogManager::Run() {
 
     int catalogCommand;
 
-    catalogCommand = catalogMenu.Execute();
-
     do {
-        switch (catalogCommand) {
+        catalogCommand = catalogMenu.Execute();
+
+        switch (catalogCommand) { // NOLINT(hicpp-multiway-paths-covered)
             case 1:
+                PrintCatalogs();
                 break;
             case 2:
                 break;
@@ -35,14 +37,14 @@ void CatalogManager::Run() {
 }
 
 void CatalogManager::PrintCatalogs() {
-    vector<ProductCatalog *> catalogs = m_repository.ListCatalogs();
+    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
 
-    cout << "Your catalog: ";
+    cout << "Your catalog: " << '\n' << left;
 
     for (auto &catalog: catalogs) {
-        cout << catalog->getId() << '\t'
-             << catalog->getName() << '\t'
-             << catalog->getDescription() << '\n';
+        cout << setw(3) << catalog.getId()
+             << setw(20) << catalog.getName()
+             << catalog.getDescription() << '\n';
     }
 }
 

@@ -14,9 +14,9 @@ void ReportManager::Run() {
 
     int reportCommand;
 
-    reportCommand = reportsMenu.Execute();
-
     do {
+        reportCommand = reportsMenu.Execute();
+
         switch (reportCommand) {
             case 1:
                 break;

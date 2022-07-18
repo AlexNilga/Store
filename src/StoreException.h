@@ -6,13 +6,13 @@
 
 using namespace std;
 
-class StoreException {
+class StoreException : exception {
 public:
     string m_message;
 
-    StoreException(const string &message) : m_message(message) {};
+    explicit StoreException(const string &message) : m_message(message) {};
 
-    string GetMessage() { return m_message; }
+    string GetMessage() const { return m_message; }
 };
 
 

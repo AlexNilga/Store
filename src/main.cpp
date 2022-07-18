@@ -5,22 +5,22 @@
 #include "StoreException.h"
 
 int main() {
-    Repository repository = Repository();
-    StoreManager store = StoreManager(repository);
-
-    store.Run();
 
     try {
-        // Initialize database.
-        Repository::Init();
 
-        Store store = Store();
+        Repository repository = Repository();
+
+        // Initialize database.
+        repository.Init();
+
+        StoreManager store = StoreManager(repository);
+
         store.Run();
 
         std::cout << "Bye!";
 
     }
-    catch (StoreException exception) {
+    catch (const StoreException &exception) {
         cerr << exception.GetMessage();
         return -1;
     }

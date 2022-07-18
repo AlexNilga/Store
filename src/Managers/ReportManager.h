@@ -1,11 +1,10 @@
-#ifndef SRC_STORE_REPORTMANAGER_H
-#define SRC_STORE_REPORTMANAGER_H
+#ifndef SRC_STORE_REPORT_MANAGER_H
+#define SRC_STORE_REPORT_MANAGER_H
 
 class ReportManager {
 private:
 public:
     void Run();
 };
-
 
 #endif

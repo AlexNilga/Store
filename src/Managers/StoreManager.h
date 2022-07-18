@@ -12,7 +12,7 @@ ReportManager m_reportManager;
 
 public:
 
-    StoreManager(Repository repository);
+    explicit StoreManager(Repository &repository);
 
     void Run();
 };

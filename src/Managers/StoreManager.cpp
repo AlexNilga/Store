@@ -4,7 +4,7 @@ const int cListCatalogsCommand = 1;
 const int cListOffersCommand = 2;
 const int cExitCommand = 3;
 
-StoreManager::StoreManager(Repository repository)
+StoreManager::StoreManager(Repository &repository)
         : m_catalogManager(repository) {
 
 }
@@ -16,9 +16,7 @@ void StoreManager::Run() {
     menu.AddItem(MenuItem("2. Reports", cListOffersCommand));
     menu.AddItem(MenuItem("3. Exit", cExitCommand));
 
-
     int command;
-
 
     do {
         command = menu.Execute();
