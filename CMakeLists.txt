@@ -20,4 +20,4 @@ add_executable(Store
         src/Store/ProductOffer.h
         src/Store/ProductOffer.cpp
         src/Managers/CatalogManager.h
-        src/Managers/CatalogManager.cpp)
+        src/Managers/CatalogManager.cpp src/StoreException.cpp src/StoreException.h)

@@ -15,8 +15,8 @@ int Menu::Execute() {
     while (true) {
         cout << endl << "Select action: " << endl;
 
-        for (auto & m_item : m_items) {
-            cout << "  " << m_item.getTitle() << endl;
+        for (auto & item : m_items) {
+            cout << "  " << item.getTitle() << endl;
         }
 
         cout << endl << "You choice:> ";
