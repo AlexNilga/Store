@@ -178,4 +178,22 @@ void Repository::DeleteOffer(int offerId) {
 /// \param offer
 void Repository::UpdateOffer(ProductOffer &offer) {
 
+    string sql = string("UPDATE INTO Offer SET ")
+                 + "NAME=\"" + offer.getName() + "\", "
+                 + "DESCRIPTION=\"" + offer.getDescription() + "\", "
+                 + "CATALOG_ID=" + to_string(offer.getCatalogId()) + ", "
+                 + "PRICE=" + to_string(offer.getPrice()) + ","
+                 + "QUANTITY=" + to_string(offer.getQuantity())
+                 + " WHERE ID=" + to_string(offer.getId()) + ";";
+
+    int rc = sqlite3_exec(
+            m_database,
+            sql.c_str(),
+            nullptr,
+            nullptr,
+            nullptr);
+
+    if (rc != SQLITE_OK) {
+        throw StoreException(string("Cannot update offer in the database: ") + sqlite3_errmsg(m_database));
+    }
 }
