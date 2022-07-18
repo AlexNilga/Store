@@ -1,6 +1,14 @@
 #include "ReportManager.h"
 #include "../Menu/Menu.h"
 
+/// Initializes new instance of ReportManager.
+/// \param repository
+ReportManager::ReportManager(Repository &repository)
+        : m_repository(repository) {
+
+}
+
+///
 void ReportManager::Run() {
     const int option1 = 1;
     const int option2 = 2;
@@ -9,16 +17,16 @@ void ReportManager::Run() {
 
     Menu reportsMenu = Menu("Reports");
 
-    reportsMenu.AddItem(MenuItem("1.", option1));
-    reportsMenu.AddItem(MenuItem("2.", option2));
-    reportsMenu.AddItem(MenuItem("0. Exit", cExitCommand));
+    reportsMenu.AddItem(MenuItem("1. List Offers (low stock first)", option1));
+    reportsMenu.AddItem(MenuItem("2. List Offers (cheap to expensive)", option2));
+    reportsMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     int reportCommand;
 
     do {
         reportCommand = reportsMenu.Execute();
 
-        switch (reportCommand) {
+        switch (reportCommand) { // NOLINT(hicpp-multiway-paths-covered)
             case 1:
                 break;
             case 2:

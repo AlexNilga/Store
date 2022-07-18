@@ -133,7 +133,7 @@ vector<ProductOffer> Repository::ListOffers(int catalogId) {
 
 /// Adds product offer to the database
 /// \param offer
-void Repository::AddOffer(ProductOffer &offer) {
+void Repository::AddOffer(const ProductOffer &offer) {
 
     string sql = "INSERT INTO Offer(NAME,DESCRIPTION,CATALOG_ID,PRICE,QUANTITY) VALUES("
                  + offer.getName() + ","
@@ -176,7 +176,7 @@ void Repository::DeleteOffer(int offerId) {
 
 /// Update offer in the database.
 /// \param offer
-void Repository::UpdateOffer(ProductOffer &offer) {
+void Repository::UpdateOffer(const ProductOffer &offer) {
 
     string sql = string("UPDATE INTO Offer SET ")
                  + "NAME=\"" + offer.getName() + "\", "

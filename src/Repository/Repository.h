@@ -25,11 +25,11 @@ public:
 
     vector<ProductOffer> ListOffers(int catalogId);
 
-    void AddOffer(ProductOffer &offer);
+    void AddOffer(const ProductOffer &offer);
 
     void DeleteOffer(int offerId);
 
-    void UpdateOffer(ProductOffer &offer);
+    void UpdateOffer(const ProductOffer &offer);
 };
 
 

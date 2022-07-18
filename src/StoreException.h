@@ -10,7 +10,7 @@ class StoreException : exception {
 public:
     string m_message;
 
-    explicit StoreException(const string &message) : m_message(message) {};
+    explicit StoreException(string message) : m_message(std::move(message)) {};
 
     string GetMessage() const { return m_message; }
 };

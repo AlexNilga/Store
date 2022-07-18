@@ -34,13 +34,13 @@ public:
 
     int getCatalogId() const { return m_catalogId; }
 
-    string getName() { return m_name; }
+    string getName() const { return m_name; }
 
-    string getDescription() { return m_description; }
+    string getDescription() const { return m_description; }
 
-    float getPrice() { return m_price; }
+    float getPrice() const { return m_price; }
 
-    int getQuantity() { return m_quantity; }
+    int getQuantity() const { return m_quantity; }
 };
 
 
