@@ -22,7 +22,7 @@ int Menu::Execute() {
         cout << endl << "You choice:> ";
         int command;
 
-        std::cin >> command;
+        cin >> command;
 
         for (auto & m_item : m_items) {
             if (command == m_item.getCommand()) {

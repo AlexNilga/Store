@@ -3,8 +3,9 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <sourceRoots>
-      <file path="$PROJECT_DIR$/SQLite" />
-      <file path="$PROJECT_DIR$/Store" />
+      <file path="$PROJECT_DIR$/src" />
+      <file path="$PROJECT_DIR$/src/SQLite" />
+      <file path="$PROJECT_DIR$/src/Store" />
     </sourceRoots>
   </component>
 </project>

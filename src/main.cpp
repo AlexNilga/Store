@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include ".\Store\Store.h"
+#include "Store/Store.h"
 
 int main() {
 

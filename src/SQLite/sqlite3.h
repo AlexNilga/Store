@@ -256,7 +256,7 @@ SQLITE_API const char *sqlite3_compileoption_get(int N);
 SQLITE_API int sqlite3_threadsafe(void);
 
 /*
-** CAPI3REF: Database Connection Handle
+** CAPI3REF: Repository Connection Handle
 ** KEYWORDS: {database connection} {database connections}
 **
 ** Each open SQLite database is represented by a pointer to an instance of
@@ -313,7 +313,7 @@ typedef sqlite_uint64 sqlite3_uint64;
 #endif
 
 /*
-** CAPI3REF: Closing A Database Connection
+** CAPI3REF: Closing A Repository Connection
 ** DESTRUCTOR: sqlite3
 **
 ** ^The sqlite3_close() and sqlite3_close_v2() routines are destructors
@@ -457,7 +457,7 @@ SQLITE_API int sqlite3_exec(
 #define SQLITE_NOTFOUND    12   /* Unknown opcode in sqlite3_file_control() */
 #define SQLITE_FULL        13   /* Insertion failed because database is full */
 #define SQLITE_CANTOPEN    14   /* Unable to open the database file */
-#define SQLITE_PROTOCOL    15   /* Database lock protocol error */
+#define SQLITE_PROTOCOL    15   /* Repository lock protocol error */
 #define SQLITE_EMPTY       16   /* Internal use only */
 #define SQLITE_SCHEMA      17   /* The database schema changed */
 #define SQLITE_TOOBIG      18   /* String or BLOB exceeds size limit */
@@ -2116,7 +2116,7 @@ struct sqlite3_mem_methods {
 #define SQLITE_CONFIG_MEMDB_MAXSIZE       29  /* sqlite3_int64 */
 
 /*
-** CAPI3REF: Database Connection Configuration Options
+** CAPI3REF: Repository Connection Configuration Options
 **
 ** These constants are the available integer configuration options that
 ** can be passed as the second argument to the [sqlite3_db_config()] interface.
@@ -3172,8 +3172,8 @@ SQLITE_API int sqlite3_set_authorizer(
 #define SQLITE_TRANSACTION          22   /* Operation       NULL            */
 #define SQLITE_UPDATE               23   /* Table Name      Column Name     */
 #define SQLITE_ATTACH               24   /* Filename        NULL            */
-#define SQLITE_DETACH               25   /* Database Name   NULL            */
-#define SQLITE_ALTER_TABLE          26   /* Database Name   Table Name      */
+#define SQLITE_DETACH               25   /* Repository Name   NULL            */
+#define SQLITE_ALTER_TABLE          26   /* Repository Name   Table Name      */
 #define SQLITE_REINDEX              27   /* Index Name      NULL            */
 #define SQLITE_ANALYZE              28   /* Table Name      NULL            */
 #define SQLITE_CREATE_VTABLE        29   /* Table Name      Module Name     */
@@ -3348,7 +3348,7 @@ SQLITE_API int sqlite3_trace_v2(
 SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 
 /*
-** CAPI3REF: Opening A New Database Connection
+** CAPI3REF: Opening A New Repository Connection
 ** CONSTRUCTOR: sqlite3
 **
 ** ^These routines open an SQLite database file as specified by the
@@ -3545,7 +3545,7 @@ SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 **  <li> <b>nolock</b>: ^The nolock parameter is a boolean query parameter
 **     which if set disables file locking in rollback journal modes.  This
 **     is useful for accessing a database on a filesystem that does not
-**     support locking.  Caution:  Database corruption might result if two
+**     support locking.  Caution:  Repository corruption might result if two
 **     or more processes write to the same database and any one of those
 **     processes uses nolock=1.
 **
@@ -3618,15 +3618,15 @@ SQLITE_API void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
 ** See also: [sqlite3_temp_directory]
 */
 SQLITE_API int sqlite3_open(
-  const char *filename,   /* Database filename (UTF-8) */
+  const char *filename,   /* Repository filename (UTF-8) */
   sqlite3 **ppDb          /* OUT: SQLite db handle */
 );
 SQLITE_API int sqlite3_open16(
-  const void *filename,   /* Database filename (UTF-16) */
+  const void *filename,   /* Repository filename (UTF-16) */
   sqlite3 **ppDb          /* OUT: SQLite db handle */
 );
 SQLITE_API int sqlite3_open_v2(
-  const char *filename,   /* Database filename (UTF-8) */
+  const char *filename,   /* Repository filename (UTF-8) */
   sqlite3 **ppDb,         /* OUT: SQLite db handle */
   int flags,              /* Flags */
   const char *zVfs        /* Name of VFS module to use */
@@ -3735,7 +3735,7 @@ SQLITE_API const char *sqlite3_filename_journal(const char*);
 SQLITE_API const char *sqlite3_filename_wal(const char*);
 
 /*
-** CAPI3REF:  Database File Corresponding To A Journal
+** CAPI3REF:  Repository File Corresponding To A Journal
 **
 ** ^If X is the name of a rollback or WAL-mode journal file that is
 ** passed into the xOpen method of [sqlite3_vfs], then
@@ -4151,21 +4151,21 @@ SQLITE_API int sqlite3_limit(sqlite3*, int id, int newVal);
 ** sqlite3_prepare_v3() with a zero prepFlags parameter.
 */
 SQLITE_API int sqlite3_prepare(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* Repository handle */
   const char *zSql,       /* SQL statement, UTF-8 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare_v2(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* Repository handle */
   const char *zSql,       /* SQL statement, UTF-8 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare_v3(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* Repository handle */
   const char *zSql,       /* SQL statement, UTF-8 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   unsigned int prepFlags, /* Zero or more SQLITE_PREPARE_ flags */
@@ -4173,21 +4173,21 @@ SQLITE_API int sqlite3_prepare_v3(
   const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare16(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* Repository handle */
   const void *zSql,       /* SQL statement, UTF-16 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const void **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare16_v2(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* Repository handle */
   const void *zSql,       /* SQL statement, UTF-16 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
   const void **pzTail     /* OUT: Pointer to unused portion of zSql */
 );
 SQLITE_API int sqlite3_prepare16_v3(
-  sqlite3 *db,            /* Database handle */
+  sqlite3 *db,            /* Repository handle */
   const void *zSql,       /* SQL statement, UTF-16 encoded */
   int nByte,              /* Maximum length of zSql in bytes. */
   unsigned int prepFlags, /* Zero or more SQLITE_PREPARE_ flags */
@@ -4243,7 +4243,7 @@ SQLITE_API const char *sqlite3_normalized_sql(sqlite3_stmt *pStmt);
 #endif
 
 /*
-** CAPI3REF: Determine If An SQL Statement Writes The Database
+** CAPI3REF: Determine If An SQL Statement Writes The Repository
 ** METHOD: sqlite3_stmt
 **
 ** ^The sqlite3_stmt_readonly(X) interface returns true (non-zero) if
@@ -5664,7 +5664,7 @@ SQLITE_API void *sqlite3_aggregate_context(sqlite3_context*, int nBytes);
 SQLITE_API void *sqlite3_user_data(sqlite3_context*);
 
 /*
-** CAPI3REF: Database Connection For Functions
+** CAPI3REF: Repository Connection For Functions
 ** METHOD: sqlite3_context
 **
 ** ^The sqlite3_context_db_handle() interface returns a copy of
@@ -6168,7 +6168,7 @@ SQLITE_API int sqlite3_sleep(int);
 SQLITE_API SQLITE_EXTERN char *sqlite3_temp_directory;
 
 /*
-** CAPI3REF: Name Of The Folder Holding Database Files
+** CAPI3REF: Name Of The Folder Holding Repository Files
 **
 ** ^(If this global variable is made to point to a string which is
 ** the name of a folder (a.k.a. directory), then all database files
@@ -6264,7 +6264,7 @@ SQLITE_API int sqlite3_win32_set_directory16(unsigned long type, const void *zVa
 SQLITE_API int sqlite3_get_autocommit(sqlite3*);
 
 /*
-** CAPI3REF: Find The Database Handle Of A Prepared Statement
+** CAPI3REF: Find The Repository Handle Of A Prepared Statement
 ** METHOD: sqlite3_stmt
 **
 ** ^The sqlite3_db_handle interface returns the [database connection] handle
@@ -6277,7 +6277,7 @@ SQLITE_API int sqlite3_get_autocommit(sqlite3*);
 SQLITE_API sqlite3 *sqlite3_db_handle(sqlite3_stmt*);
 
 /*
-** CAPI3REF: Return The Schema Name For A Database Connection
+** CAPI3REF: Return The Schema Name For A Repository Connection
 ** METHOD: sqlite3
 **
 ** ^The sqlite3_db_name(D,N) interface returns a pointer to the schema name
@@ -6299,7 +6299,7 @@ SQLITE_API sqlite3 *sqlite3_db_handle(sqlite3_stmt*);
 SQLITE_API const char *sqlite3_db_name(sqlite3 *db, int N);
 
 /*
-** CAPI3REF: Return The Filename For A Database Connection
+** CAPI3REF: Return The Filename For A Repository Connection
 ** METHOD: sqlite3
 **
 ** ^The sqlite3_db_filename(D,N) interface returns a pointer to the filename
@@ -6636,7 +6636,7 @@ SQLITE_API int sqlite3_enable_shared_cache(int);
 SQLITE_API int sqlite3_release_memory(int);
 
 /*
-** CAPI3REF: Free Memory Used By A Database Connection
+** CAPI3REF: Free Memory Used By A Repository Connection
 ** METHOD: sqlite3
 **
 ** ^The sqlite3_db_release_memory(D) interface attempts to free as much heap
@@ -6799,7 +6799,7 @@ SQLITE_API SQLITE_DEPRECATED void sqlite3_soft_heap_limit(int N);
 */
 SQLITE_API int sqlite3_table_column_metadata(
   sqlite3 *db,                /* Connection handle */
-  const char *zDbName,        /* Database name or NULL */
+  const char *zDbName,        /* Repository name or NULL */
   const char *zTableName,     /* Table name */
   const char *zColumnName,    /* Column name */
   char const **pzDataType,    /* OUTPUT: Declared data type */
@@ -7409,7 +7409,7 @@ typedef struct sqlite3_blob sqlite3_blob;
 **
 ** This function fails with SQLITE_ERROR if any of the following are true:
 ** <ul>
-**   <li> ^(Database zDb does not exist)^,
+**   <li> ^(Repository zDb does not exist)^,
 **   <li> ^(Table zTable does not exist within database zDb)^,
 **   <li> ^(Table zTable is a WITHOUT ROWID table)^,
 **   <li> ^(Column zColumn does not exist)^,
@@ -7915,7 +7915,7 @@ SQLITE_API int sqlite3_mutex_notheld(sqlite3_mutex*);
 SQLITE_API sqlite3_mutex *sqlite3_db_mutex(sqlite3*);
 
 /*
-** CAPI3REF: Low-Level Control Of Database Files
+** CAPI3REF: Low-Level Control Of Repository Files
 ** METHOD: sqlite3
 ** KEYWORDS: {file control}
 **
@@ -8318,7 +8318,7 @@ SQLITE_API int sqlite3_status64(
 #define SQLITE_STATUS_MALLOC_COUNT         9
 
 /*
-** CAPI3REF: Database Connection Status
+** CAPI3REF: Repository Connection Status
 ** METHOD: sqlite3
 **
 ** ^This interface is used to retrieve runtime status information
@@ -8964,7 +8964,7 @@ typedef struct sqlite3_backup sqlite3_backup;
 ** and sqlite3_backup_remaining() until after the next
 ** sqlite3_backup_step().)^
 **
-** <b>Concurrent Usage of Database Handles</b>
+** <b>Concurrent Usage of Repository Handles</b>
 **
 ** ^The source [database connection] may be used by the application for other
 ** purposes while a backup operation is underway or being initialized.
@@ -9389,7 +9389,7 @@ SQLITE_API int sqlite3_wal_checkpoint(sqlite3 *db, const char *zDb);
 ** from SQL.
 */
 SQLITE_API int sqlite3_wal_checkpoint_v2(
-  sqlite3 *db,                    /* Database handle */
+  sqlite3 *db,                    /* Repository handle */
   const char *zDb,                /* Name of attached database (or NULL) */
   int eMode,                      /* SQLITE_CHECKPOINT_* value */
   int *pnLog,                     /* OUT: Size of WAL log in frames */
@@ -10057,9 +10057,9 @@ SQLITE_API void *sqlite3_preupdate_hook(
   sqlite3 *db,
   void(*xPreUpdate)(
     void *pCtx,                   /* Copy of third arg to preupdate_hook() */
-    sqlite3 *db,                  /* Database handle */
+    sqlite3 *db,                  /* Repository handle */
     int op,                       /* SQLITE_UPDATE, DELETE or INSERT */
-    char const *zDb,              /* Database name */
+    char const *zDb,              /* Repository name */
     char const *zName,            /* Table name */
     sqlite3_int64 iKey1,          /* Rowid of row about to be deleted/updated */
     sqlite3_int64 iKey2           /* New rowid value (for a rowid UPDATE) */
@@ -10087,7 +10087,7 @@ SQLITE_API int sqlite3_preupdate_blobwrite(sqlite3 *);
 SQLITE_API int sqlite3_system_errno(sqlite3*);
 
 /*
-** CAPI3REF: Database Snapshot
+** CAPI3REF: Repository Snapshot
 ** KEYWORDS: {snapshot} {sqlite3_snapshot}
 **
 ** An instance of the snapshot object records the state of a [WAL mode]
@@ -10111,7 +10111,7 @@ typedef struct sqlite3_snapshot {
 } sqlite3_snapshot;
 
 /*
-** CAPI3REF: Record A Database Snapshot
+** CAPI3REF: Record A Repository Snapshot
 ** CONSTRUCTOR: sqlite3_snapshot
 **
 ** ^The [sqlite3_snapshot_get(D,S,P)] interface attempts to make a
@@ -10400,7 +10400,7 @@ SQLITE_API int sqlite3_deserialize(
 */
 #define SQLITE_DESERIALIZE_FREEONCLOSE 1 /* Call sqlite3_free() on close */
 #define SQLITE_DESERIALIZE_RESIZEABLE  2 /* Resize using sqlite3_realloc64() */
-#define SQLITE_DESERIALIZE_READONLY    4 /* Database is read-only */
+#define SQLITE_DESERIALIZE_READONLY    4 /* Repository is read-only */
 
 /*
 ** Undo the hack that converts floating point types to integer for
@@ -10595,7 +10595,7 @@ typedef struct sqlite3_changeset_iter sqlite3_changeset_iter;
 ** to the database when the session object is created.
 */
 SQLITE_API int sqlite3session_create(
-  sqlite3 *db,                    /* Database handle */
+  sqlite3 *db,                    /* Repository handle */
   const char *zDb,                /* Name of db (e.g. "main") */
   sqlite3_session **ppSession     /* OUT: New session object */
 );
@@ -11569,7 +11569,7 @@ SQLITE_API int sqlite3changegroup_output(
 SQLITE_API void sqlite3changegroup_delete(sqlite3_changegroup*);
 
 /*
-** CAPI3REF: Apply A Changeset To A Database
+** CAPI3REF: Apply A Changeset To A Repository
 **
 ** Apply a changeset or patchset to a database. These functions attempt to
 ** update the "main" database attached to handle db with the changes found in

@@ -1,24 +1,23 @@
 cmake_minimum_required(VERSION 3.22)
-project(Store)
+project(src/Store)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Store main.cpp
-        SQLite/sqlite3.h
-        SQLite/sqlite3.c
-        Store/Menu.h
-        Store/Menu.cpp
-        Store/MenuItem.h
-        Store/MenuItem.cpp
-        Store/Store.h
-        Store/Store.cpp
-        Store/ProductCatalog.h
-        Store/ProductCatalog.cpp
-        Store/ProductOffer.h
-        Store/ProductOffer.cpp
-        Managers/CatalogManager.h
-        Managers/CatalogManager.cpp
-        Managers/OfferManager.h
-        Managers/OfferManager.cpp
-        Store/Repository.h
-        Store/Repository.cpp)
+add_executable(Store
+        src/main.cpp
+        src/SQLite/sqlite3.h
+        src/SQLite/sqlite3.c
+        src/Repository/Repository.h
+        src/Repository/Repository.cpp
+        src/Menu/Menu.h
+        src/Menu/Menu.cpp
+        src/Menu/MenuItem.h
+        src/Menu/MenuItem.cpp
+        src/Store/Store.h
+        src/Store/Store.cpp
+        src/Store/ProductCatalog.h
+        src/Store/ProductCatalog.cpp
+        src/Store/ProductOffer.h
+        src/Store/ProductOffer.cpp
+        src/Managers/CatalogManager.h
+        src/Managers/CatalogManager.cpp)

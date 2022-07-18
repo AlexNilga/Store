@@ -4,11 +4,12 @@
 #include <vector>
 #include "MenuItem.h"
 
+using namespace std;
 
 class Menu {
 
 private:
-    std::vector<MenuItem> m_items;
+    vector<MenuItem> m_items;
 
 public:
     Menu();
