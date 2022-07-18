@@ -3,17 +3,22 @@
 
 #include <vector>
 #include "../Store/ProductCatalog.h"
+#include "../Repository/Repository.h"
+
+using namespace std;
 
 class CatalogManager {
 
 private:
     std::vector<ProductCatalog> m_catalog;
+    Repository &m_repository;
+
+    void PrintCatalogs();
 
 public:
-    std::vector<ProductCatalog> getCatalog() { return m_catalog; };
+    explicit CatalogManager(Repository &repository);
 
-    void setCatalog(const std::vector<ProductCatalog> &catalog) { m_catalog = catalog; }
+    void Run();
 };
-
 
 #endif

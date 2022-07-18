@@ -13,7 +13,7 @@ private:
 public:
     MenuItem(const string &title, int command);
 
-    string getTitle() { return this->title; }
+    string getTitle() const { return this->title; }
 
     int getCommand() const { return this->command; }
 

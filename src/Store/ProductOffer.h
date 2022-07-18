@@ -16,15 +16,12 @@ private:
     int m_quantity;
 
 public:
-    ProductOffer(int id,
-                 const string &name,
-                 const string &description,
-                 int catalogId,
+    ProductOffer(int id, string name, string description, int catalogId,
                  float price,
                  int quantity)
             : m_Id(id),
-              m_name(name),
-              m_description(description),
+              m_name(std::move(name)),
+              m_description(std::move(description)),
               m_catalogId(catalogId),
               m_price(price),
               m_quantity(quantity){};
@@ -34,8 +31,6 @@ public:
     string getName() { return m_name; }
 
     string getDescription() { return m_description; }
-
-    void setId(int id) { m_Id = id; }
 };
 
 

@@ -16,7 +16,7 @@ public:
 
     ~Repository();
 
-    static void Init();
+    void Init();
 
     vector<ProductCatalog> ListCatalogs();
 };

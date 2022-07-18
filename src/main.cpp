@@ -1,22 +1,26 @@
 #include <iostream>
 
-#include "Store/Store.h"
+#include "Managers/StoreManager.h"
 #include "Repository/Repository.h"
 #include "StoreException.h"
 
 int main() {
 
     try {
-        // Initialize database.
-        Repository::Init();
 
-        Store store = Store();
+        Repository repository = Repository();
+
+        // Initialize database.
+        repository.Init();
+
+        StoreManager store = StoreManager(repository);
+
         store.Run();
 
         std::cout << "Bye!";
 
     }
-    catch (StoreException exception) {
+    catch (const StoreException &exception) {
         cerr << exception.GetMessage();
         return -1;
     }
