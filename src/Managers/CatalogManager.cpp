@@ -5,6 +5,8 @@
 
 using namespace std;
 
+const int cExitCommand = 0;
+
 CatalogManager::CatalogManager(Repository &repository)
         : m_repository(repository) {
 }
@@ -12,12 +14,15 @@ CatalogManager::CatalogManager(Repository &repository)
 void CatalogManager::Run() {
     const int cListCatalogsCommand = 1;
     const int cListOffersCommand = 2;
-    const int cExitCommand = 0;
+    const int cDeleteOffersCommand = 3;
+    const int cAddOffersCommand = 4;
 
     Menu catalogMenu = Menu("Operation");
 
     catalogMenu.AddItem(MenuItem("1. List Catalogs", cListCatalogsCommand));
     catalogMenu.AddItem(MenuItem("2. List Offers", cListOffersCommand));
+    catalogMenu.AddItem(MenuItem("3. Delete Offers", cDeleteOffersCommand));
+    catalogMenu.AddItem(MenuItem("4. Delete Offers", cAddOffersCommand));
     catalogMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     int catalogCommand;
@@ -27,62 +32,53 @@ void CatalogManager::Run() {
 
         switch (catalogCommand) { // NOLINT(hicpp-multiway-paths-covered)
             case cListCatalogsCommand:
-                ListCatalogs();
+                PrintCatalogs();
                 break;
             case cListOffersCommand:
                 ListOffers();
+                break;
+            case cDeleteOffersCommand:
+                DeleteOffer();
+                break;
+            case cAddOffersCommand:
+                AddOffer();
                 break;
         }
 
     } while (catalogCommand != cExitCommand);
 }
 
-void CatalogManager::ListCatalogs() {
-
-    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
-    PrintCatalogs(catalogs);
+void CatalogManager::ListOffers() {
+    int catalogId = GetCatalog();
+    if (catalogId != 0) {
+        PrintOffers(catalogId);
+    }
 }
 
-void CatalogManager::ListOffers() {
-    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
+void CatalogManager::DeleteOffer() {
 
-    int chooseCommand;
-    const int cExitCommand = 0;
-
-    Menu chooseMenu = Menu("Catalogs");
-
-    for (auto &catalog: catalogs) {
-        chooseMenu.AddItem(MenuItem(
-                to_string(catalog.getId())
-                + ". " + catalog.getName(),
-                catalog.getId()));
+    int catalogId = GetCatalog();
+    if (catalogId == cExitCommand) {
+        return;
     }
 
-    chooseMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
+    int offerId = GetOffer(catalogId);
+    if (offerId == cExitCommand) {
+        return;
+    }
 
-    do {
-        chooseCommand = chooseMenu.Execute();
+    m_repository.DeleteOffer(offerId);
+    PrintOffers(catalogId);
+}
 
-        if (chooseCommand == cExitCommand) {
-            return;
-        }
+void CatalogManager::AddOffer() {
 
-        for (auto &catalog: catalogs) {
-            if (chooseCommand == catalog.getId()) {
-
-                vector<ProductOffer> offers = m_repository.ListOffers(chooseCommand);
-                PrintOffers(offers);
-
-                return;
-            }
-        }
-
-    } while (true);
 }
 
 /// Prints catalogs to the console.
 /// \param catalogs
-void CatalogManager::PrintCatalogs(const vector<ProductCatalog> &catalogs) {
+void CatalogManager::PrintCatalogs() {
+    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
 
     cout << endl << left
          << setw(5) << "ID"
@@ -99,9 +95,17 @@ void CatalogManager::PrintCatalogs(const vector<ProductCatalog> &catalogs) {
     }
 }
 
-/// Prints product offers to the console.
-/// \param offers
-void CatalogManager::PrintOffers(const vector<ProductOffer> &offers) {
+/// Prints product offers from a catalog to the console.
+/// \param catalogId
+void CatalogManager::PrintOffers(int catalogId) {
+
+    vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
+
+    if (offers.empty()) {
+        cout << "NO OFFERS IN THE CATALOG" << endl;
+        return;
+    }
+
     cout << endl << left;
     cout << left
          << setw(5) << "ID"
@@ -121,6 +125,42 @@ void CatalogManager::PrintOffers(const vector<ProductOffer> &offers) {
              << endl;
     }
 }
+
+int CatalogManager::GetCatalog() {
+    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
+
+    Menu menu = Menu("Choose Catalog: ");
+
+    for (auto &catalog: catalogs) {
+        menu.AddItem(MenuItem(
+                to_string(catalog.getId())
+                + ". " + catalog.getName(),
+                catalog.getId()));
+    }
+
+    menu.AddItem(MenuItem("0. Go Back", cExitCommand));
+
+    return menu.Execute();
+}
+
+int CatalogManager::GetOffer(int catalogId) {
+
+    vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
+
+    Menu menu = Menu("Choose Offer: ");
+
+    for (auto &offer: offers) {
+        menu.AddItem(MenuItem(
+                to_string(offer.getId())
+                + ". " + offer.getName(),
+                offer.getId()));
+    }
+
+    menu.AddItem(MenuItem("0. Go Back", cExitCommand));
+
+    return menu.Execute();
+}
+
 
 
 

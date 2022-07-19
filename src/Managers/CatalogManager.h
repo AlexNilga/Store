@@ -13,11 +13,15 @@ private:
     std::vector<ProductCatalog> m_catalog;
     Repository &m_repository;
 
-    void ListCatalogs();
     void ListOffers();
+    void DeleteOffer();
+    void AddOffer();
 
-    static void PrintCatalogs(const vector<ProductCatalog> &catalogs);
-    static void PrintOffers(const vector<ProductOffer> &offers);
+    int GetCatalog();
+    int GetOffer(int catalogId);
+
+    void PrintCatalogs();
+    void PrintOffers(int catalogId);
 
 public:
     explicit CatalogManager(Repository &repository);
