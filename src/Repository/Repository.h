@@ -25,6 +25,8 @@ public:
 
     vector<ProductOffer> ListOffers(int catalogId);
 
+    ProductOffer GetOffer(int offerId);
+
     void AddOffer(const ProductOffer &offer);
 
     void DeleteOffer(int offerId);

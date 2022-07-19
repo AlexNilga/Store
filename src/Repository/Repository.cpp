@@ -131,6 +131,13 @@ vector<ProductOffer> Repository::ListOffers(int catalogId) {
     return offers;
 }
 
+/// Gets offer by ID.
+/// \param offerId offer ID
+/// \return
+ProductOffer Repository::GetOffer(int offerId){
+    return ProductOffer(0,"","",0,0,0);
+}
+
 /// Adds product offer to the database
 /// \param offer
 void Repository::AddOffer(const ProductOffer &offer) {
