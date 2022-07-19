@@ -17,6 +17,8 @@ private:
     void DeleteOffer();
     void AddOffer();
 
+    void ChangeOffer();
+
     int GetCatalog();
     int GetOffer(int catalogId);
 

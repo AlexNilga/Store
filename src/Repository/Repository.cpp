@@ -135,9 +135,9 @@ vector<ProductOffer> Repository::ListOffers(int catalogId) {
 /// \param offer
 void Repository::AddOffer(const ProductOffer &offer) {
 
-    string sql = "INSERT INTO Offer(NAME,DESCRIPTION,CATALOG_ID,PRICE,QUANTITY) VALUES("
-                 + offer.getName() + ","
-                 + offer.getDescription() + ","
+    string sql = "INSERT INTO Offer(NAME,DESCRIPTION,CATALOG_ID,PRICE,QUANTITY) VALUES(\""
+                 + offer.getName() + "\",\""
+                 + offer.getDescription() + "\","
                  + to_string(offer.getCatalogId()) + ","
                  + to_string(offer.getPrice()) + ","
                  + to_string(offer.getQuantity())

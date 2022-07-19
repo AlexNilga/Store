@@ -16,13 +16,15 @@ void CatalogManager::Run() {
     const int cListOffersCommand = 2;
     const int cDeleteOffersCommand = 3;
     const int cAddOffersCommand = 4;
+    const int cChangeOffersCommand = 5;
 
     Menu catalogMenu = Menu("Operation");
 
     catalogMenu.AddItem(MenuItem("1. List Catalogs", cListCatalogsCommand));
     catalogMenu.AddItem(MenuItem("2. List Offers", cListOffersCommand));
-    catalogMenu.AddItem(MenuItem("3. Delete Offers", cDeleteOffersCommand));
-    catalogMenu.AddItem(MenuItem("4. Delete Offers", cAddOffersCommand));
+    catalogMenu.AddItem(MenuItem("3. Delete Offer", cDeleteOffersCommand));
+    catalogMenu.AddItem(MenuItem("4. Add Offer", cAddOffersCommand));
+    catalogMenu.AddItem(MenuItem("5. Change Offer", cChangeOffersCommand));
     catalogMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     int catalogCommand;
@@ -42,6 +44,9 @@ void CatalogManager::Run() {
                 break;
             case cAddOffersCommand:
                 AddOffer();
+                break;
+            case cChangeOffersCommand:
+                ChangeOffer();
                 break;
         }
 
@@ -73,6 +78,63 @@ void CatalogManager::DeleteOffer() {
 
 void CatalogManager::AddOffer() {
 
+    int catalogId = GetCatalog();
+    if (catalogId == cExitCommand) {
+        return;
+    }
+
+    string name;
+    string description;
+    float price;
+    int quantity;
+
+    cin.ignore();
+
+    cout << "Enter offer name: ";
+    getline(cin, name);
+    cout << "Enter description: ";
+    getline(cin, description);
+    cout << "Enter offer price: ";
+    cin >> price;
+    cout << "Enter stock quantity: ";
+    cin >> quantity;
+
+    ProductOffer offer = ProductOffer(0, name, description, catalogId, price, quantity);
+    m_repository.AddOffer(offer);
+
+    PrintOffers(catalogId);
+}
+
+void CatalogManager::ChangeOffer() {
+
+    int catalogId = GetCatalog();
+    if (catalogId == cExitCommand) {
+        return;
+    }
+
+    int offerId = GetOffer(catalogId);
+    if (offerId == cExitCommand) {
+        return;
+    }
+
+    vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
+
+    string name;
+    string description;
+
+    cin.ignore();
+
+    cout << "Enter name: (" << offers[offerId - 1].getName() << ") Enter";
+    getline(cin, name);
+    if(name != ""){
+
+    }
+
+    cout << "Enter description: ";
+    getline(cin, description);
+    if(description != ""){
+
+    }
 }
 
 /// Prints catalogs to the console.
@@ -160,7 +222,3 @@ int CatalogManager::GetOffer(int catalogId) {
 
     return menu.Execute();
 }
-
-
-
-
