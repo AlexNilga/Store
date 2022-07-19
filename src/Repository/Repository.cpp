@@ -226,7 +226,7 @@ void Repository::DeleteOffer(int offerId) {
 /// \param offer
 void Repository::UpdateOffer(const ProductOffer &offer) {
 
-    string sql = string("UPDATE INTO Offer SET ")
+    string sql = string("UPDATE Offer SET ")
                  + "NAME=\"" + offer.getName() + "\", "
                  + "DESCRIPTION=\"" + offer.getDescription() + "\", "
                  + "CATALOG_ID=" + to_string(offer.getCatalogId()) + ", "

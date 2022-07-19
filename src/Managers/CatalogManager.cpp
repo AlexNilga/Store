@@ -17,6 +17,7 @@ void CatalogManager::Run() {
     const int cDeleteOffersCommand = 3;
     const int cAddOffersCommand = 4;
     const int cChangeOffersCommand = 5;
+    const int cSearchOffersCommand = 6;
 
     Menu catalogMenu = Menu("Operation");
 
@@ -25,6 +26,7 @@ void CatalogManager::Run() {
     catalogMenu.AddItem(MenuItem("3. Delete Offer", cDeleteOffersCommand));
     catalogMenu.AddItem(MenuItem("4. Add Offer", cAddOffersCommand));
     catalogMenu.AddItem(MenuItem("5. Change Offer", cChangeOffersCommand));
+    catalogMenu.AddItem(MenuItem("6. Search Offer", cSearchOffersCommand));
     catalogMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     int catalogCommand;
@@ -47,6 +49,9 @@ void CatalogManager::Run() {
                 break;
             case cChangeOffersCommand:
                 ChangeOffer();
+                break;
+            case cSearchOffersCommand:
+                Search();
                 break;
         }
 
@@ -117,24 +122,62 @@ void CatalogManager::ChangeOffer() {
         return;
     }
 
-    vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
+    ProductOffer offer = m_repository.GetOffer(offerId);
+
+    if (offer.getId() == 0) {
+        cout << "No offer with ID " << offerId << endl;
+        return;
+    }
 
     string name;
     string description;
 
     cin.ignore();
 
-    cout << "Enter name: (" << offers[offerId - 1].getName() << ") Enter";
+    cout << "New name: (" << offer.getName() << "): ";
     getline(cin, name);
-    if(name != ""){
-
+    if (name.empty()) {
+        name = offer.getName();
     }
 
-    cout << "Enter description: ";
+    cout << "New description: (" << offer.getDescription() << "): ";
     getline(cin, description);
-    if(description != ""){
-
+    if (description.empty()) {
+        description = offer.getDescription();
     }
+
+    string priceString;
+    float price;
+
+    cout << "New price: (" << offer.getPrice() << "): ";
+    getline(cin, priceString);
+    if (priceString.empty()) {
+        price = offer.getPrice();
+    } else {
+        price = stof(priceString);
+    }
+
+    string quantityString;
+    int quantity;
+
+    cout << "New quantity: (" << offer.getQuantity() << "): " << flush;
+    getline(cin, quantityString);
+    if (quantityString.empty()) {
+        quantity = offer.getQuantity();
+    } else {
+        quantity = stoi(quantityString);
+    }
+
+    ProductOffer updatedOffer{
+            offer.getId(),
+            name,
+            description,
+            offer.getCatalogId(),
+            price,
+            quantity};
+
+    m_repository.UpdateOffer(updatedOffer);
+    PrintOffers(catalogId);
 }
 
 /// Prints catalogs to the console.
@@ -163,8 +206,13 @@ void CatalogManager::PrintOffers(int catalogId) {
 
     vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
 
+    PrintOffers(offers);
+}
+
+void CatalogManager::PrintOffers(const vector<ProductOffer> &offers) {
+
     if (offers.empty()) {
-        cout << "NO OFFERS IN THE CATALOG" << endl;
+        cout << "NO OFFERS" << endl;
         return;
     }
 
@@ -221,4 +269,29 @@ int CatalogManager::GetOffer(int catalogId) {
     menu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     return menu.Execute();
+}
+
+void CatalogManager::Search() {
+    string searchValue;
+    cout << "What to search: ";
+    cin >> searchValue;
+
+    if (searchValue.empty()) {
+        return;
+    }
+
+    vector<ProductOffer> result;
+    auto catalogs = m_repository.ListCatalogs();
+
+    for (auto &catalog: catalogs) {
+        auto offers = m_repository.ListOffers(catalog.getId());
+        for (const auto &offer: offers) {
+            if (offer.getName().find(searchValue) != string::npos
+                || offer.getDescription().find(searchValue) != string::npos) {
+                result.push_back(offer);
+            }
+        }
+    }
+
+    PrintOffers(result);
 }

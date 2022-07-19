@@ -16,9 +16,7 @@ add_executable(Store
         src/Managers/StoreManager.h
         src/Managers/StoreManager.cpp
         src/Store/ProductCatalog.h
-        src/Store/ProductCatalog.cpp
         src/Store/ProductOffer.h
-        src/Store/ProductOffer.cpp
         src/Managers/CatalogManager.h
         src/Managers/CatalogManager.cpp
         src/Managers/ReportManager.cpp

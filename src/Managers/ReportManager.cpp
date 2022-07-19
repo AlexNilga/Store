@@ -4,7 +4,7 @@
 /// Initializes new instance of ReportManager.
 /// \param repository
 ReportManager::ReportManager(Repository &repository)
-        : m_repository(repository) {
+        : m_repository{repository} {
 
 }
 

@@ -24,6 +24,9 @@ private:
 
     void PrintCatalogs();
     void PrintOffers(int catalogId);
+    static void PrintOffers(const vector<ProductOffer>& offers);
+
+    void Search();
 
 public:
     explicit CatalogManager(Repository &repository);
