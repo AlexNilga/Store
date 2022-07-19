@@ -19,7 +19,7 @@ int main() {
 
     }
     catch (const StoreException &exception) {
-        cerr << exception.GetMessage();
+        cerr << exception.what();
         return -1;
     }
 
