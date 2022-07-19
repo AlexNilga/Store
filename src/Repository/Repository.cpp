@@ -86,6 +86,29 @@ static int ReadOffersCallback(
     return SQLITE_OK;
 }
 
+/// Called by SQLite for each row in the product offers dataset.
+/// \param data Pointer to product offer.
+/// \param argc Holds the number of results.
+/// \param argv Single row values.
+/// \param azColName Column names.
+/// \return Zero if case of success.
+static int ReadSingleOfferCallback(
+        void *data,
+        __attribute__((unused)) int argc,
+        char **argv,
+        __attribute__((unused)) char **azColName) {
+
+    *((ProductOffer*) data) = ProductOffer(
+            stoi(argv[0]),
+            argv[1],
+            argv[2],
+            stoi(argv[3]),
+            stof(argv[4]),
+            stoi(argv[5]));
+
+    return SQLITE_ABORT;
+}
+
 /// Lists available product catalogs.
 /// \return collection of catalogs.
 vector<ProductCatalog> Repository::ListCatalogs() {
@@ -134,8 +157,26 @@ vector<ProductOffer> Repository::ListOffers(int catalogId) {
 /// Gets offer by ID.
 /// \param offerId offer ID
 /// \return
-ProductOffer Repository::GetOffer(int offerId){
-    return ProductOffer(0,"","",0,0,0);
+ProductOffer Repository::GetOffer(int offerId) {
+
+    ProductOffer offer = ProductOffer(0, "", "", 0, 0, 0);
+
+    string sql = "SELECT ID, NAME, DESCRIPTION, CATALOG_ID, PRICE, QUANTITY FROM Offer WHERE ID="
+                 + to_string(offerId)
+                 + ";";
+
+    int rc = sqlite3_exec(
+            m_database,
+            sql.c_str(),
+            ReadSingleOfferCallback,
+            &offer,
+            nullptr);
+
+    if (rc != SQLITE_OK && rc!=SQLITE_ABORT) {
+        throw StoreException(string("Cannot retrieve product offer: ") + sqlite3_errmsg(m_database));
+    }
+
+    return offer;
 }
 
 /// Adds product offer to the database
@@ -189,7 +230,7 @@ void Repository::UpdateOffer(const ProductOffer &offer) {
                  + "NAME=\"" + offer.getName() + "\", "
                  + "DESCRIPTION=\"" + offer.getDescription() + "\", "
                  + "CATALOG_ID=" + to_string(offer.getCatalogId()) + ", "
-                 + "PRICE=" + to_string(offer.getPrice()) + ","
+                 + "PRICE=" + to_string(offer.getPrice()) + ", "
                  + "QUANTITY=" + to_string(offer.getQuantity())
                  + " WHERE ID=" + to_string(offer.getId()) + ";";
 
