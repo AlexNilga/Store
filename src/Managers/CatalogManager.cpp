@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 #include "CatalogManager.h"
 #include "../Menu/Menu.h"
 
@@ -13,20 +14,24 @@ CatalogManager::CatalogManager(Repository &repository)
 
 void CatalogManager::Run() {
     const int cListCatalogsCommand = 1;
-    const int cListOffersCommand = 2;
-    const int cDeleteOffersCommand = 3;
-    const int cAddOffersCommand = 4;
-    const int cChangeOffersCommand = 5;
-    const int cSearchOffersCommand = 6;
+    const int cSortNameCommand = 2;
+    const int cSortQuantityCommand = 3;
+    const int cSortPriceCommand = 4;
+    const int cDeleteOffersCommand = 5;
+    const int cAddOffersCommand = 6;
+    const int cChangeOffersCommand = 7;
+    const int cSearchOffersCommand = 8;
 
     Menu catalogMenu = Menu("Operation");
 
     catalogMenu.AddItem(MenuItem("1. List Catalogs", cListCatalogsCommand));
-    catalogMenu.AddItem(MenuItem("2. List Offers", cListOffersCommand));
-    catalogMenu.AddItem(MenuItem("3. Delete Offer", cDeleteOffersCommand));
-    catalogMenu.AddItem(MenuItem("4. Add Offer", cAddOffersCommand));
-    catalogMenu.AddItem(MenuItem("5. Change Offer", cChangeOffersCommand));
-    catalogMenu.AddItem(MenuItem("6. Search Offer", cSearchOffersCommand));
+    catalogMenu.AddItem(MenuItem("2. List Offers(A-z)", cSortNameCommand));
+    catalogMenu.AddItem(MenuItem("3. List Offers(Low stock first)", cSortQuantityCommand));
+    catalogMenu.AddItem(MenuItem("4. List Offers(Cheap first)", cSortPriceCommand));
+    catalogMenu.AddItem(MenuItem("5. Delete Offer", cDeleteOffersCommand));
+    catalogMenu.AddItem(MenuItem("6. Add Offer", cAddOffersCommand));
+    catalogMenu.AddItem(MenuItem("7. Change Offer", cChangeOffersCommand));
+    catalogMenu.AddItem(MenuItem("8. Search Offer", cSearchOffersCommand));
     catalogMenu.AddItem(MenuItem("0. Go Back", cExitCommand));
 
     int catalogCommand;
@@ -38,18 +43,31 @@ void CatalogManager::Run() {
             case cListCatalogsCommand:
                 PrintCatalogs();
                 break;
-            case cListOffersCommand:
-                ListOffers();
+
+            case cSortNameCommand:
+                ListOffers(Name);
                 break;
+
+            case cSortQuantityCommand:
+                ListOffers(Quantity);
+                break;
+
+            case cSortPriceCommand:
+                ListOffers(Price);
+                break;
+
             case cDeleteOffersCommand:
                 DeleteOffer();
                 break;
+
             case cAddOffersCommand:
                 AddOffer();
                 break;
+
             case cChangeOffersCommand:
                 ChangeOffer();
                 break;
+
             case cSearchOffersCommand:
                 Search();
                 break;
@@ -58,10 +76,27 @@ void CatalogManager::Run() {
     } while (catalogCommand != cExitCommand);
 }
 
-void CatalogManager::ListOffers() {
+int CatalogManager::GetCatalog() {
+    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
+
+    Menu menu = Menu("Choose Catalog: ");
+
+    for (auto &catalog: catalogs) {
+        menu.AddItem(MenuItem(
+                to_string(catalog.getId())
+                + ". " + catalog.getName(),
+                catalog.getId()));
+    }
+
+    menu.AddItem(MenuItem("0. Go Back", cExitCommand));
+
+    return menu.Execute();
+}
+
+void CatalogManager::ListOffers(SortDirection sortDirection) {
     int catalogId = GetCatalog();
     if (catalogId != 0) {
-        PrintOffers(catalogId);
+        PrintOffers(catalogId, sortDirection);
     }
 }
 
@@ -180,6 +215,49 @@ void CatalogManager::ChangeOffer() {
     PrintOffers(catalogId);
 }
 
+void CatalogManager::Search() {
+    string searchValue;
+    cout << "What to search: ";
+    cin >> searchValue;
+
+    if (searchValue.empty()) {
+        return;
+    }
+
+    vector<ProductOffer> result;
+    auto catalogs = m_repository.ListCatalogs();
+
+    for (auto &catalog: catalogs) {
+        auto offers = m_repository.ListOffers(catalog.getId());
+        for (const auto &offer: offers) {
+            if (offer.getName().find(searchValue) != string::npos
+                || offer.getDescription().find(searchValue) != string::npos) {
+                result.push_back(offer);
+            }
+        }
+    }
+
+    PrintOffers(result);
+}
+
+int CatalogManager::GetOffer(int catalogId) {
+
+    vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
+
+    Menu menu = Menu("Choose Offer: ");
+
+    for (auto &offer: offers) {
+        menu.AddItem(MenuItem(
+                to_string(offer.getId())
+                + ". " + offer.getName(),
+                offer.getId()));
+    }
+
+    menu.AddItem(MenuItem("0. Go Back", cExitCommand));
+
+    return menu.Execute();
+}
+
 /// Prints catalogs to the console.
 /// \param catalogs
 void CatalogManager::PrintCatalogs() {
@@ -200,12 +278,44 @@ void CatalogManager::PrintCatalogs() {
     }
 }
 
+bool offerByNameComparer(
+        const ProductOffer &firstOffer,
+        const ProductOffer &lastOffer) {
+
+    return firstOffer.getName() < lastOffer.getName();
+}
+
+bool offerByQuantityComparer(
+        const ProductOffer &firstOffer,
+        const ProductOffer &lastOffer) {
+
+    return firstOffer.getQuantity() < lastOffer.getQuantity();
+}
+
+bool offerByPriceComparer(
+        const ProductOffer &firstOffer,
+        const ProductOffer &lastOffer) {
+
+    return firstOffer.getPrice() < lastOffer.getPrice();
+}
+
 /// Prints product offers from a catalog to the console.
 /// \param catalogId
-void CatalogManager::PrintOffers(int catalogId) {
+void CatalogManager::PrintOffers(int catalogId, SortDirection sortDirection) {
 
     vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
 
+    switch (sortDirection) {
+        case Name:
+            std::sort(offers.begin(), offers.end(), offerByNameComparer);
+            break;
+        case Quantity:
+            std::sort(offers.begin(), offers.end(), offerByQuantityComparer);
+            break;
+        case Price:
+            std::sort(offers.begin(), offers.end(), offerByPriceComparer);
+            break;
+    }
     PrintOffers(offers);
 }
 
@@ -234,64 +344,4 @@ void CatalogManager::PrintOffers(const vector<ProductOffer> &offers) {
              << setw(5) << offer.getQuantity()
              << endl;
     }
-}
-
-int CatalogManager::GetCatalog() {
-    vector<ProductCatalog> catalogs = m_repository.ListCatalogs();
-
-    Menu menu = Menu("Choose Catalog: ");
-
-    for (auto &catalog: catalogs) {
-        menu.AddItem(MenuItem(
-                to_string(catalog.getId())
-                + ". " + catalog.getName(),
-                catalog.getId()));
-    }
-
-    menu.AddItem(MenuItem("0. Go Back", cExitCommand));
-
-    return menu.Execute();
-}
-
-int CatalogManager::GetOffer(int catalogId) {
-
-    vector<ProductOffer> offers = m_repository.ListOffers(catalogId);
-
-    Menu menu = Menu("Choose Offer: ");
-
-    for (auto &offer: offers) {
-        menu.AddItem(MenuItem(
-                to_string(offer.getId())
-                + ". " + offer.getName(),
-                offer.getId()));
-    }
-
-    menu.AddItem(MenuItem("0. Go Back", cExitCommand));
-
-    return menu.Execute();
-}
-
-void CatalogManager::Search() {
-    string searchValue;
-    cout << "What to search: ";
-    cin >> searchValue;
-
-    if (searchValue.empty()) {
-        return;
-    }
-
-    vector<ProductOffer> result;
-    auto catalogs = m_repository.ListCatalogs();
-
-    for (auto &catalog: catalogs) {
-        auto offers = m_repository.ListOffers(catalog.getId());
-        for (const auto &offer: offers) {
-            if (offer.getName().find(searchValue) != string::npos
-                || offer.getDescription().find(searchValue) != string::npos) {
-                result.push_back(offer);
-            }
-        }
-    }
-
-    PrintOffers(result);
 }

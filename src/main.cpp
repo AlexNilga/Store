@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "Managers/StoreManager.h"
 #include "Repository/Repository.h"
 #include "StoreException.h"
+#include "Managers/CatalogManager.h"
 
 int main() {
 
@@ -12,8 +12,8 @@ int main() {
         Repository repository = Repository();
         repository.Init();
 
-        StoreManager store = StoreManager(repository);
-        store.Run();
+        CatalogManager catalogManager = CatalogManager(repository);
+        catalogManager.Run();
 
         std::cout << "Bye!";
 

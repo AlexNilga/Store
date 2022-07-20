@@ -13,11 +13,8 @@ add_executable(Store
         src/Menu/Menu.cpp
         src/Menu/MenuItem.h
         src/Menu/MenuItem.cpp
-        src/Managers/StoreManager.h
-        src/Managers/StoreManager.cpp
         src/Store/ProductCatalog.h
         src/Store/ProductOffer.h
         src/Managers/CatalogManager.h
         src/Managers/CatalogManager.cpp
-        src/Managers/ReportManager.cpp
-        src/Managers/ReportManager.h)
+        )

@@ -10,29 +10,37 @@ using namespace std;
 class CatalogManager {
 
 private:
+    enum SortDirection {
+        None, Name, Quantity, Price
+    };
+
     std::vector<ProductCatalog> m_catalog;
     Repository &m_repository;
 
-    void ListOffers();
+    int GetCatalog();
+
+    void ListOffers(SortDirection sortDirection);
+
     void DeleteOffer();
+
     void AddOffer();
 
     void ChangeOffer();
 
-    int GetCatalog();
+    void Search();
+
     int GetOffer(int catalogId);
 
     void PrintCatalogs();
-    void PrintOffers(int catalogId);
-    static void PrintOffers(const vector<ProductOffer>& offers);
 
-    void Search();
+    void PrintOffers(int catalogId, SortDirection sortDirection = None);
+
+    static void PrintOffers(const vector<ProductOffer> &offers);
 
 public:
     explicit CatalogManager(Repository &repository);
 
     void Run();
-
 };
 
 #endif
